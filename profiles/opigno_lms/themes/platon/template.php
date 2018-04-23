@@ -367,7 +367,7 @@ function platon_preprocess_page(&$vars) {
         }
       }
     }
-    $html .= '</ul><div class="slider-footer"><div class="slider-counter"><div class="top">1</div><div class="bottom">'. $i .'</div></div></div>';
+    //$html .= '</ul><div class="slider-footer"><div class="slider-counter"><div class="top">1</div><div class="bottom">'. $i .'</div></div></div>';
 
     drupal_set_title($vars['site_name']);
     $vars['page']['content'] = $html;$vars['page']['content'] = $html;
