@@ -11,16 +11,16 @@
 
       <?php if ($logged_in): ?>
         <a href="<?php print url('user/logout'); ?>" class="mobile-link-icon">
-          <img src="<?php print $base_path . $directory; ?>/img/logout-icon.png">
+          <img src="<?php print $base_path . $directory; ?>/img/logout-icon.png" alt="Log out">
         </a>
       <?php endif; ?>
 
       <a href="<?php print url('search/node'); ?>" class="mobile-link-icon">
-        <img src="<?php print $base_path . $directory; ?>/img/search-submit.png">
+        <img src="<?php print $base_path . $directory; ?>/img/search-submit.png" alt="Search">
       </a>
 
       <a href="#top" id="menu-toggle-link" class="mobile-link-icon">
-        <img src="<?php print $base_path . $directory; ?>/img/menu-toggle-icon.png">
+        <img src="<?php print $base_path . $directory; ?>/img/menu-toggle-icon.png" alt="menu toggle icon">
       </a>
 
       <div id="header-login" class="hidden-mobile">
@@ -43,7 +43,7 @@
       <div id="user-account-information">
         <div id="user-links">
           <a href="<?php print url('user'); ?>">
-            <img src="<?php print $base_path . $directory; ?>/img/anonymous-account.png">
+            <img src="<?php print $base_path . $directory; ?>/img/anonymous-account.png" alt="anonymous user icon">
           </a>
           <span class="welcome hidden-mobile"><?php print t("welcome @user", array('@user' => $logged_in ? $user->name : t("guest"))); ?></span>
         </div>

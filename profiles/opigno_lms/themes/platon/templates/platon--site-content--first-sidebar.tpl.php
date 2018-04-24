@@ -12,7 +12,7 @@
         $settings = theme_get_setting('platon_home_page_settings');
         global $base_url;
         (empty($settings)) ? $settings = variable_get('theme_platon_settings') : null;
-        (drupal_is_front_page() && !$logged_in && $settings['platon_use_home_page_markup']) ? print('<div class="title">'. t('Menu') .'<div class="close-menu"><a href="#" class="open"><img src="'. $base_url .'/profiles/opigno_lms/themes/platon/img/homepage-close-menu.png"></a></div></div>') : null;
+        (drupal_is_front_page() && !$logged_in && $settings['platon_use_home_page_markup']) ? print('<div class="title">'. t('Menu') .'<div class="close-menu"><a href="#" class="open"><img src="'. $base_url .'/profiles/opigno_lms/themes/platon/img/homepage-close-menu.png" alt="close menu"></a></div></div>') : null;
       ?>
       <?php if(drupal_is_front_page() && !$logged_in): ?>
         <!-- <div style="background-color: <?php (isset($backgroundColor) && !empty($backgroundColor)) ? print($backgroundColor) : print('#009ee0'); ?>"> -->
@@ -24,5 +24,5 @@
     </div>
   <?php endif; ?>
   <?php print render($page['sidebar_first']); ?>
-  <button class="trigger"><span></span></button>
+  <!--<button class="trigger"><span></span></button>-->
 </div>

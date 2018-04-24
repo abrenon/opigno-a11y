@@ -1346,11 +1346,13 @@ function user_login_block($form) {
     '#maxlength' => USERNAME_MAX_LENGTH,
     '#size' => 15,
     '#required' => TRUE,
+    '#title_display' => 'invisible',
   );
   $form['pass'] = array('#type' => 'password',
     '#title' => t('Password'),
     '#size' => 15,
     '#required' => TRUE,
+    '#title_display' => 'invisible',
   );
   $form['actions'] = array('#type' => 'actions');
   $form['actions']['submit'] = array('#type' => 'submit',
