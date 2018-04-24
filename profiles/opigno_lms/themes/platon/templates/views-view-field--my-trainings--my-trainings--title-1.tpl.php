@@ -46,7 +46,7 @@
     <?php print views_trim_text(array('max_length' => 75,'ellipsis' => true,'word_boundary' => true,'html' => true), $body) ?>
   </div>
   <div class="default-hidden">
-    <a href="#" class="close-btn"></a>
+    <a href="#" class="close-btn"><p class="a11y-hidden"> Close </p></a>
   </div>
 </div>
 

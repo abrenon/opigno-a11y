@@ -33,7 +33,7 @@
     <?php print views_trim_text(array('max_length' => 60,'ellipsis' => true,'word_boundary' => true,'html' => true), $view->render_field('body', $view->row_index)) ?>
   </div>
   <div class="default-hidden">
-    <a href="#" class="close-btn"></a>
+    <a href="#" class="close-btn"><p class="a11y-hidden"> Close </p></a>
   </div>
 </div>
 
