@@ -951,9 +951,8 @@ function platon_form_user_login_block_alter(&$form, &$form_state, $form_id) {
 
   $form['user_login_fieldset']['actions']['submit']['#value'] = t('Login');
 
-  //unset($form['user_login_fieldset']['name']['#title'],
-        //$form['user_login_fieldset']['pass']['#title'],
-        //$form['user_login_fieldset']['links']);
+  $form['user_login_fieldset']['name']['#title_display'] = "invisible";
+  $form['user_login_fieldset']['pass']['#title_display'] = "invisible";
    unset($form['user_login_fieldset']['links']);
 
 }

@@ -24,5 +24,5 @@
     </div>
   <?php endif; ?>
   <?php print render($page['sidebar_first']); ?>
-  <!--<button class="trigger"><span></span></button>-->
+  <button class="trigger"><span><p class="a11y-hidden">Open/Close Menu</p></span></button>
 </div>
