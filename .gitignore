@@ -4,3 +4,31 @@ sites/*/settings*.php
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+
+# Drupal-core, don't want to track these
+.editorconfig
+.htaccess
+.htaccess-1524510519
+CHANGELOG.txt
+COPYRIGHT.txt
+INSTALL.mysql.txt
+INSTALL.pgsql.txt
+INSTALL.sqlite.txt
+INSTALL.txt
+LICENSE.txt
+MAINTAINERS.txt
+README.txt
+authorize.php
+cron.php
+includes/
+index.php
+install.php
+misc/
+modules/
+profiles/opigno_lms/libraries/dompdf/lib/fonts/log.htm
+robots.txt
+scripts/
+themes/
+update.php
+web.config
+xmlrpc.php
