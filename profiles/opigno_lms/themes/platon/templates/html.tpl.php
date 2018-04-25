@@ -17,6 +17,13 @@
   <!--[if lt IE 9]>
   <script src="<?php print base_path() . $directory; ?>/js/vendor/html5shiv/html5shiv.js"></script>
   <![endif]-->
+  <script type="text/javascript" src="/profiles/opigno_lms/libraries/ckeditor/ckeditor.js" ></script>
+  <script type="text/javascript">
+    window.onload = function() {
+        CKEDITOR.replaceAll( 'to-be-ck' );
+    };
+   </script>
+
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
   <div id="skip-link">
