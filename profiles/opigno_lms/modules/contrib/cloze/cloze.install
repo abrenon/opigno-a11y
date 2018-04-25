@@ -57,35 +57,5 @@ function cloze_schema() {
       'ids' => array('result_id', 'question_nid', 'question_vid'),
     ),
   );
-  $schema['quiz_cloze_node_properties'] = array(
-    'fields' => array(
-      'nid' => array(
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'vid' => array(
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'learning_mode' => array(
-        'type' => 'int',
-        'size' => 'tiny',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
-      ),
-    ),
-    'primary key' => array('nid', 'vid'),
-  );
   return $schema;
-}
-
-/**
- * Adding table {quiz_cloze_node_properties}
- */
-function cloze_update_7401() {
-  db_create_table('quiz_cloze_node_properties', drupal_get_schema_unprocessed('cloze', 'quiz_cloze_node_properties'));
-  return 'Adding table {quiz_cloze_node_properties}';
 }

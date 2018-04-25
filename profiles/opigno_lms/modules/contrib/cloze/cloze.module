@@ -9,7 +9,7 @@
  */
 function cloze_help($path, $args) {
   if ($path == 'admin/help#cloze') {
-    return t('This module provides a fill in the blanks question type for Quiz.');
+    return t('This module provides a cloze question type for Quiz.');
   }
 }
 
@@ -19,7 +19,7 @@ function cloze_help($path, $args) {
 function cloze_quiz_question_info() {
   return array(
     'cloze' => array(
-      'name' => t('Fill in the blanks question'),
+      'name' => t('Cloze question'),
       'description' => t('Quiz questions that allow a user to fill-in the missing words.'),
       'question provider' => 'ClozeQuestion',
       'response provider' => 'ClozeResponse',
@@ -102,20 +102,20 @@ function _cloze_get_question_chunks($question) {
     $match = FALSE;
     $pos = strpos($question, '[');
     if ($pos) {
-      $substring = substr($question, 0, $pos);
-      $question = preg_replace('/'. preg_quote($substring) .'/', '', $question, 1);
-      $chunks[] = $substring;
+      $substring = substr($question, 0, $pos - 1);
+      $question = str_replace($substring, '', $question);
+      $chunks[] = ($substring);
       $match = TRUE;
     }
     $pos = strpos($question, ']');
     if ($pos !== FALSE) {
       $substring = substr($question, 0, $pos + 1);
-      $question = preg_replace('/'. preg_quote($substring) .'/', '', $question, 1);
-      $chunks[] = $substring;
+      $question = str_replace($substring, '', $question);
+      $chunks[] = ($substring);
       $match = TRUE;
     }
     if (!$match) {
-      $chunks[] = $question;
+      $chunks[] = ($question);
       $question = '';
     }
   }
@@ -166,7 +166,7 @@ function _cloze_get_user_answer($question, $answer) {
   $correct_answer_chunks = _cloze_get_correct_answer_chunks($question);
   foreach ($chunks as $key => $value) {
     if (isset($answer[$key]) && !empty($answer[$key])) {
-      $class = (_cloze_get_clean_text($correct_answer_chunks[$key]) == _cloze_get_clean_text($answer[$key])) ? 'correct' : 'incorrect';
+      $class = (drupal_strtolower($correct_answer_chunks[$key]) == drupal_strtolower($answer[$key])) ? 'correct' : 'incorrect';
       $class .= ' answer user-answer';
       $user_answer[$key] = '<span class="'. $class .'">' . $answer[$key] . '</span>';
     }
@@ -176,13 +176,4 @@ function _cloze_get_user_answer($question, $answer) {
   }
   $output = implode(' ', $user_answer);
   return str_replace("\n", "<br/>", $output);
-}
-
-/**
- * Makes the given text consistent for comparison
- */
-function _cloze_get_clean_text($text) {
-  $text = trim($text);
-  $text = drupal_strtolower($text);
-  return $text;
 }

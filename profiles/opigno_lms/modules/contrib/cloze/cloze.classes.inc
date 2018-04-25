@@ -21,24 +21,7 @@ class ClozeQuestion extends QuizQuestion {
    * @see QuizQuestion#saveNodeProperties($is_new)
    */
   public function saveNodeProperties($is_new = FALSE) {
-    if ($is_new || $this->node->revision == 1) {
-      $id = db_insert('quiz_cloze_node_properties')
-        ->fields(array(
-          'nid' => $this->node->nid,
-          'vid' => $this->node->vid,
-          'learning_mode' => $this->node->learning_mode,
-        ))
-        ->execute();
-    }
-    else {
-      db_update('quiz_cloze_node_properties')
-        ->fields(array(
-          'learning_mode' => $this->node->learning_mode,
-        ))
-        ->condition('nid', $this->node->nid)
-        ->condition('vid', $this->node->vid)
-        ->execute();
-    }
+    // no special property for cloze question node
   }
 
   /**
@@ -77,9 +60,8 @@ class ClozeQuestion extends QuizQuestion {
       return $this->nodeProperties;
     }
     $props = parent::getNodeProperties();
-    $res_a = db_query('SELECT learning_mode FROM {quiz_cloze_node_properties} WHERE nid = :nid AND vid = :vid', array(':nid' => $this->node->nid, ':vid' => $this->node->vid))->fetchAssoc();
-    $this->nodeProperties = (is_array($res_a)) ? array_merge($props, $res_a) : $props;
-    return $this->nodeProperties;
+    $this->nodeProperties = $props;
+    return $props;
   }
 
   /**
@@ -109,12 +91,6 @@ class ClozeQuestion extends QuizQuestion {
         '#markup' => '<div class="quiz-solution cloze-question">' . $solution . '</div>',
         '#weight' => 5,
       );
-      if (isset($this->node->learning_mode) && $this->node->learning_mode) {
-        $content['learning_mode'] = array(
-          '#markup' => '<div class="">'. t('Enabled to accept only the right answers.') .'</div>',
-          '#weight' => 5,
-        );
-      }
     }
     else {
       $content['answers'] = array(
@@ -125,22 +101,6 @@ class ClozeQuestion extends QuizQuestion {
     return $content;
   }
 
-  function _answerJs($question) {
-    $answers = array();
-    $chunks = _cloze_get_correct_answer_chunks($question);
-    foreach($chunks as $key => $chunk) {
-      $id = 'answer-' .$key;
-      $answers[$id] = $chunk;
-    }
-    foreach($chunks as $key => $chunk) {
-      $key = $key-1;
-      $id = 'answer-' .$key;
-      $answers_alt[$id] = $chunk;
-    }
-    $answers = array_merge($answers, $answers_alt);
-    drupal_add_js(array('answer' => $answers), 'setting');
-  }
-
   /**
    * Implementation of getAnsweringForm
    *
@@ -149,13 +109,9 @@ class ClozeQuestion extends QuizQuestion {
   public function getAnsweringForm(array $form_state = NULL, $rid) {
     $form = parent::getAnsweringForm($form_state, $rid);
     $form['#theme'] = 'cloze_answering_form';
-    $module_path = drupal_get_path('module', 'cloze');
-    if (isset($this->node->learning_mode) && $this->node->learning_mode) {
-      $form['#attached']['js'][] = $module_path . '/theme/cloze.js';
-      $question = $form['question']['#markup'];
-      $this->_answerJs($question);
-    }
-    $form['#attached']['css'][] = $module_path . '/theme/cloze.css';
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'cloze') . '/theme/cloze.css'
+    );
     $form['open_wrapper'] = array(
       '#markup' => '<div class="cloze-question">',
     );
@@ -188,7 +144,6 @@ class ClozeQuestion extends QuizQuestion {
             '#required' => FALSE,
             '#attributes' => array(
               'autocomplete' => 'off',
-              'class' => array('answer-'. $position),
             ),
           );
         }
@@ -215,18 +170,14 @@ class ClozeQuestion extends QuizQuestion {
    * @see QuizQuestion#getCreationForm($form_state)
    */
   public function getCreationForm(array &$form_state = NULL) {
-    $module_path = drupal_get_path('module', 'cloze');
-    $form['#attached']['css'][] = $module_path . '/theme/cloze.css';
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'cloze') . '/theme/cloze.css',
+    );
     $form['instructions'] = array(
       '#markup' => '<div class="cloze-instruction">' .
-      t('For free text cloze, mention the correct answer inside the square bracket. For multichoice cloze, provide the options separated by commas with correct answer as first. <br/>Example question: [The] Sun raises in the [east, west, north, south]. <br/>Answer: <span class="answer correct correct-answer">The</span> Sun raises in the <span class="answer correct correct-answer">east</span>.') .
+      t('For free text cloze, mention the correct ansewr inside the square bracket. For multichoice cloze, provide the options separated by commas with correct answer as first. <br/>Example question: [The] Sun raises in the [east, west, north, south]. <br/>Answer: <span class="answer correct correct-answer">The</span> sun raises the <span class="answer correct correct-answer">east</span>.') .
       '</div>',
       '#weight' => -10,
-    );
-    $form['learning_mode'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Allow right answers only'),
-      '#description' => t('This is meant to be used for learning purpose. If this option is enabled only the right answers will be accepted.'),
     );
     return $form;
   }
@@ -252,7 +203,7 @@ class ClozeQuestion extends QuizQuestion {
       return $this->getMaximumScore();
     }
     foreach ($correct_answer as $key => $value) {
-      if (_cloze_get_clean_text($correct_answer[$key]) == _cloze_get_clean_text($user_answer[$key])) {
+      if (drupal_strtolower($correct_answer[$key]) == drupal_strtolower($user_answer[$key])) {
         $correct_answer_count++;
       }
     }
@@ -278,9 +229,9 @@ class ClozeResponse extends QuizQuestionResponse {
     if (!isset($answer)) {
       $r = db_query("SELECT answer_id, answer, score, question_vid, question_nid, result_id FROM {quiz_cloze_user_answers} WHERE question_nid = :question_nid AND question_vid = :question_vid AND result_id = :result_id", array(':question_nid' => $question_node->nid, ':question_vid'=>$question_node->vid, ':result_id' => $result_id))->fetch();
       if (!empty($r)) {
-        $this->answer = unserialize($r->answer);
-        $this->score = $r->score;
-        $this->answer_id = $r->answer_id;
+	$this->answer = unserialize($r->answer);
+	$this->score = $r->score;
+	$this->answer_id = $r->answer_id;
       }
     }
     else {
@@ -360,7 +311,7 @@ class ClozeResponse extends QuizQuestionResponse {
     );
     foreach (_cloze_get_question_chunks($question) as $position => $chunk) {
       if (strpos($chunk, '[') === FALSE) {
-        // this "tries[foobar]" hack is needed becaues response handler engine checks for input field
+        // this "tries[foobar]" hack is needed becaues question handler engine checks for input field
         // with name tries
         $question_form['tries['. $position .']'] = array(
           '#markup' => str_replace("\n", "<br/>", $chunk),
