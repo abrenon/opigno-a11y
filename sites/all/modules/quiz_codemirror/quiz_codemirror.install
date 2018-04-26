@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * The installer file for quiz codemirror module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function quiz_codemirror_install() {
+  // Add body field to quiz codemirror node
+  quiz_question_add_body_field('quiz_codemirror');
+}

@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * The main file for quiz_codemirror.
+ *
+ * CodeMirror pages are implemented as a question type. However, they do not affect the score.
+ * @file
+ */
+
+/**
+ * Implements hook_help().
+ */
+function quiz_codemirror_help($path, $args) {
+  if ($path == 'admin/help#quiz_codemirror') {
+    return t('Provides <a href="https://codemirror.net/index.html">CodeMirror</a> pages which can be inserted alongside questions in a lesson.');
+  }
+}
+
+/**
+ * Implements hook_quiz_question_info().
+ */
+function quiz_codemirror_quiz_question_info() {
+  return array(
+    'quiz_codemirror' => array(
+      'name' => t('CodeMirror slide'),
+      'description' => t('Provides <a href="https://codemirror.net/index.html">CodeMirror</a> pages which can be inserted alongside questions in a lesson. These will allow users to input/edit some code which will be evaluated in the browser.'),
+      'question provider' => 'QuizCodeMirrorQuestion',
+      'response provider' => 'QuizCodeMirrorResponse',
+      'module' => 'quiz_question', // All wrapper functions are in that module.
+    ),
+  );
+}
+
+/**
+ * Implements hook_config().
+ */
+function quiz_codemirror_config() {
+  return FALSE;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function quiz_codemirror_theme() {
+  return array(
+    'quiz_codemirror_answering_form' => array(
+      'render element' => 'form',
+      'path' => drupal_get_path('module', 'quiz_codemirror') . '/theme',
+      'template' => 'quiz-codemirror-answering-form',
+    ),
+  );
+}
