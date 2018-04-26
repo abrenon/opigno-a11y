@@ -1,0 +1,10 @@
+:focus {
+  outline: 5px double red;
+}
+input:focus {
+    background-color: rgb(245, 183, 177);
+}
+button:focus{
+  outline: 5px double red;
+}
+.a11y-hide { height: 1px; width: 1px; position: absolute; overflow: hidden; top: -10px; } 
